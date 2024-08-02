@@ -1,113 +1,317 @@
+'use client';
+import * as React from "react";
+import {useId} from "react";
 import Image from "next/image";
+import { DatePicker } from "@fluentui/react-datepicker-compat";
+import {
+    Accordion,
+    AccordionHeader,
+    AccordionItem,
+    AccordionPanel,
+    Body1,
+    Button,
+    Caption1,
+    Card,
+    CardFooter,
+    CardHeader,
+    CardPreview,
+    CompoundButton,
+    Dialog,
+    DialogActions,
+    DialogBody,
+    DialogContent,
+    DialogSurface,
+    DialogTitle,
+    DialogTrigger,
+    Field,
+    InfoLabel,
+    Label,
+    Link,
+    makeStyles,
+    Menu,
+    MenuItem,
+    MenuList,
+    MenuPopover,
+    MenuTrigger,
+    mergeClasses,
+    Popover,
+    PopoverSurface,
+    PopoverTrigger,
+    Rating,
+    SearchBox,
+    SpinButton,
+    Spinner,
+    SplitButton,
+    Toast,
+    ToastBody,
+    Toaster,
+    ToastFooter,
+    ToastTitle,
+    tokens,
+    typographyStyles,
+    useToastController,
+} from '@fluentui/react-components';
+import {ArrowReplyRegular, CalendarMonthRegular, CallEndRegular, ShareRegular} from "@fluentui/react-icons";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
+const useStyles = makeStyles({
+    link: typographyStyles.title2,
+    container: {
+        flex: '1 1 auto',
+        minWidth: '100%',
+        padding: '1rem 2rem',
+        boxSizing: 'border-box',
+    },
+    darkBackground: {
+        backgroundColor: tokens.colorPaletteBlueBackground2,
+    },
+    roundButton: {
+        borderRadius: tokens.borderRadiusCircular,
+        backgroundColor: tokens.colorNeutralBackground1,
+        color: tokens.colorNeutralForeground1,
+        fontSize: tokens.fontSizeBase400,
+        textShadow: tokens.shadow64
+    },
+    card: {
+        margin: "auto",
+        width: "720px",
+        maxWidth: "100%",
+    },
+    control: {
+        maxWidth: "300px",
+    },
+});
+
+const resolveAsset = (asset: string) => {
+    const ASSET_URL =
+        "https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/src/assets/";
+
+    return `${ASSET_URL}${asset}`;
+};
+
+export default function Home({LabelProps, CompoundButtonProps, MenuButtonProps, InfoLabelProps}) {
+    const classes = useStyles();
+    const mainContainerClasses = mergeClasses(classes.container, classes.darkBackground);
+    const [target, setTarget] = React.useState<HTMLElement | null>(null);
+
+    const toasterId = useId("toaster");
+    const { dispatchToast } = useToastController(toasterId);
+    const notify = () =>
+        dispatchToast(
+            <Toast>
+                <ToastTitle action={<Link>Undo</Link>}>Email sent</ToastTitle>
+                <ToastBody subtitle="Subtitle">This is a toast body</ToastBody>
+                <ToastFooter>
+                    <Link>Action</Link>
+                    <Link>Action</Link>
+                </ToastFooter>
+            </Toast>,
+            { intent: "success" }
+        );
+
+    return (
+        <main className={mainContainerClasses}>
+
+            <h3>Image</h3>
+            <Image src="//www.mastercard.us/content/dam/public/mastercardcom/na/us/en/homepage/Home/mc-logo-52.svg"
+                   alt="Mastercard"
+                   width={100}
+                   height={100}
             />
-          </a>
-        </div>
-      </div>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+            <hr/>
+            <h3>Button</h3>
+            <Button appearance="primary"
+                    icon={{className: classes.buttonIcon, children: <CallEndRegular/>}}
+                    className={classes.roundButton}
+                    style={{'marginRight': '1rem'}}>
+                Get started
+            </Button>
+            &nbsp;
+            <CompoundButton
+                icon={<CalendarMonthRegular />}
+                secondaryContent="Secondary content"
+                {...CompoundButtonProps}
+            >
+                CompoundButton
+            </CompoundButton>
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+            <hr/>
+            <h3>Link</h3>
+            <Link href="/test" className={classes.link}>Link w/ typographyStyles.title2</Link>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+            <hr/>
+            <h3>Tooltip</h3>
+            <div style={{display: "flex", gap: 10}}>
+                <Popover>
+                    <PopoverTrigger>
+                        <Button appearance="primary">Tooltip Top</Button>
+                    </PopoverTrigger>
+                    <PopoverSurface style={{minWidth: 100}}>Container</PopoverSurface>
+                </Popover>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+                <Popover positioning='after'>
+                    <PopoverTrigger disableButtonEnhancement>
+                        <Button appearance="primary">Tooltip After</Button>
+                    </PopoverTrigger>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+                    <PopoverSurface style={{minWidth: 100}}>Container</PopoverSurface>
+                </Popover>
+
+                <Popover positioning={{position: "above", align: "start", target}}>
+                    <PopoverTrigger disableButtonEnhancement>
+                        <Button appearance="primary">Tooltip Target</Button>
+                    </PopoverTrigger>
+
+                    <PopoverSurface style={{minWidth: 100}}>Container</PopoverSurface>
+                </Popover>
+                <Button ref={setTarget}>Target</Button>
+
+                <InfoLabel
+                    info={
+                        <>
+                            This is example information for an InfoLabel.{" "}
+                            <Link href="https://react.fluentui.dev">Learn more</Link>
+                        </>
+                    }
+                    {...InfoLabelProps}
+                >
+                    InfoLabel Example
+                </InfoLabel>
+            </div>
+
+            <hr/>
+            <h3>Menu</h3>
+            <Menu>
+                <MenuTrigger>
+                    <SplitButton appearance="primary" menuButton={MenuButtonProps}>Show Menu</SplitButton>
+                </MenuTrigger>
+                <MenuPopover>
+                    <MenuList>
+                        <MenuItem>New </MenuItem>
+                        <MenuItem>New Window</MenuItem>
+                        <MenuItem disabled>Open File</MenuItem>
+                        <MenuItem>Open Folder</MenuItem>
+                    </MenuList>
+                </MenuPopover>
+            </Menu>
+
+            <hr/>
+            <h3>Spin Button</h3>
+            <Label {...LabelProps} htmlFor="example-spinbutton">A SpinButton</Label>
+            <br/>
+            <SpinButton id="example-spinbutton" defaultValue={10} />
+
+            <hr/>
+            <h3>Accordion</h3>
+            <Accordion collapsible={true}>
+                <AccordionItem value="1">
+                    <AccordionHeader>Accordion Header 1</AccordionHeader>
+                    <AccordionPanel>
+                        <div>Accordion Panel 1</div>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem value="2">
+                    <AccordionHeader>Accordion Header 2</AccordionHeader>
+                    <AccordionPanel>
+                        <div>Accordion Panel 2</div>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem value="3">
+                    <AccordionHeader>Accordion Header 3</AccordionHeader>
+                    <AccordionPanel>
+                        <div>Accordion Panel 3</div>
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
+
+            <hr/>
+            <h3>Card</h3>
+            <Card className={classes.card}>
+                <CardHeader
+                    image={
+                        <img
+                            src={resolveAsset("avatar_elvia.svg")}
+                            alt="Elvia Atkins avatar picture"
+                        />
+                    }
+                    header={
+                        <Body1>
+                            <b>Elvia Atkins</b> mentioned you
+                        </Body1>
+                    }
+                    description={<Caption1>5h ago · About us - Overview</Caption1>}
+                />
+
+                <CardPreview
+                    logo={
+                        <img src={resolveAsset("docx.png")} alt="Microsoft Word document" />
+                    }
+                >
+                    <img
+                        src={resolveAsset("doc_template.png")}
+                        alt="Preview of a Word document: About Us - Overview"
+                    />
+                </CardPreview>
+
+                <CardFooter>
+                    <Button icon={<ArrowReplyRegular fontSize={16} />}>Reply</Button>
+                    <Button icon={<ShareRegular fontSize={16} />}>Share</Button>
+                </CardFooter>
+            </Card>
+
+            <hr/>
+            <h3>Dialog</h3>
+            <Dialog>
+                <DialogTrigger disableButtonEnhancement>
+                    <Button>Open dialog</Button>
+                </DialogTrigger>
+                <DialogSurface>
+                    <DialogBody>
+                        <DialogTitle>Dialog title</DialogTitle>
+                        <DialogContent>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
+                            exercitationem cumque repellendus eaque est dolor eius expedita
+                            nulla ullam? Tenetur reprehenderit aut voluptatum impedit voluptates
+                            in natus iure cumque eaque?
+                        </DialogContent>
+                        <DialogActions>
+                            <DialogTrigger disableButtonEnhancement>
+                                <Button appearance="secondary">Close</Button>
+                            </DialogTrigger>
+                            <Button appearance="primary">Do Something</Button>
+                        </DialogActions>
+                    </DialogBody>
+                </DialogSurface>
+            </Dialog>
+
+            <hr/>
+            <h3>Rating</h3>
+            <Rating />
+
+            <hr/>
+            <h3>SearchBox</h3>
+            <Field label="Sample SearchBox">
+                <SearchBox />
+            </Field>
+
+            <hr/>
+            <h3>Spinner</h3>
+            <Spinner />
+
+            <hr/>
+            <h3>Toaster</h3>
+            <Toaster toasterId={toasterId} />
+            <Button onClick={notify}>Make toast</Button>
+
+            <hr/>
+            <h3>DatePicker</h3>
+            <Field label="Select a date">
+                <DatePicker
+                    className={classes.control}
+                    placeholder="Select a date..."
+                />
+            </Field>
+        </main>
+    );
+
 }
